@@ -8,7 +8,7 @@ class Gearbox implements JsonSerializable {
 	private $id;
 	private $name;
 	private $type;
-	public function __construct($id, $name, $type) {
+	public function __construct($id, $name = null, $type = null) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->type = $type;

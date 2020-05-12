@@ -7,7 +7,7 @@ use JsonSerializable;
 class Engine implements JsonSerializable {
 	private $id;
 	private $name;
-	public function __construct($id, $name) {
+	public function __construct($id, $name = null) {
 		$this->id = $id;
 		$this->name = $name;
 	}
@@ -20,7 +20,7 @@ class Engine implements JsonSerializable {
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
-			'name' => $this->id
+			'name' => $this->name
 		];
 	}
 }

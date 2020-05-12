@@ -2,6 +2,8 @@
 
 namespace data;
 
+use http\Exception;
+
 class DB {
 	private $errorText = '';
 	private $connection;

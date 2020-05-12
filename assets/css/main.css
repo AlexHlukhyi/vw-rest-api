@@ -1,0 +1,10 @@
+.navbar-brand {
+	color: #001e50 !important;
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+.navbar-brand img {
+	margin-right: 25px;
+}
+.navbar {
+	margin-bottom: 25px;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Volkswagen - Адмін панель</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light shadow">
+    <a class="navbar-brand" href="#">
+        <img src="assets/img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Volkswagen - Адмін панель
+    </a>
+    <button type="button" class="btn btn-success add-compl">
+        <i class="fas fa-plus-circle"></i>
+        Створити
+    </button>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Модель</th>
+                        <th scope="col">Комплектація</th>
+                        <th scope="col">Двигун</th>
+                        <th scope="col">КПП</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="table-row-prototype" hidden complId="0">
+                        <th scope="row">1</th>
+                        <td id="compl-0-model">Chaser</td>
+                        <td id="compl-0-name">Tourer V</td>
+                        <td id="compl-0-engine">2JZ-GTE VVTI</td>
+                        <td id="compl-0-gearbox">Getrag-124</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info edit-compl">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger delete-compl">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">
+                    Редагувати комплектацію
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="complId" placeholder="0">
+                <div class="form-group">
+                    <label for="complName">Назва комплектації</label>
+                    <input type="text" class="form-control" id="complName" placeholder="Назва">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" class="btn btn-primary" id="editModalSave">Зберегти</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="editModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">
+                    Створити Комплектацію
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="addComplName">Назва комплектації</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="addComplName" placeholder="Назва">
+                </div>
+                <label for="addComplModelSelect">Модель</label>
+                <div class="input-group mb-3">
+                    <select id="addComplModelSelect" class="custom-select">
+                        <option selected>Виберіть модель...</option>
+                    </select>
+                </div>
+                <label for="addComplEngineSelect">Двигун</label>
+                <div class="input-group mb-3">
+                    <select id="addComplEngineSelect" class="custom-select">
+                        <option selected>Виберіть двигун...</option>
+                    </select>
+                </div>
+                <label for="addComplGearboxSelect">КПП</label>
+                <div class="input-group mb-3">
+                    <select id="addComplGearboxSelect" class="custom-select">
+                        <option selected>Виберіть КПП...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" class="btn btn-primary" id="addModalSave">Зберегти</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
