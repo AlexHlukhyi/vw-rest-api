@@ -13,7 +13,10 @@ $app = new App();
 switch ($_GET['action']) {
 	case 'getComplectations': {
 		$complectations = $app->getComplectations();
-		$response = ['complectations' => $complectations];
+		$response = [
+			'quantity' => $complectations[0][0]['quantity'],
+			'complectations' => $complectations[1]
+		];
 		break;
 	}
 	case 'getComplectation' : {

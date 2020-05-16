@@ -1,7 +1,12 @@
 function getData() {
-	$.get("/api/?action=getComplectations", (complectations) => {
-		updateTable(complectations);
+	$.get("/api/?action=getComplectations", (data) => {
+		updateHead(data);
+		updateTable(data);
 	});
+}
+
+function updateHead({quantity}) {
+	$('#compl-count').html(quantity);
 }
 
 function updateTable({complectations}) {
@@ -52,6 +57,7 @@ function deleteCompl(complId) {
 				$(`tr[complId]`).each(function (i, elem) {
 					$(elem).find('[scope=row]').html(i);
 				});
+				getData();
 			}
 		}
 	});

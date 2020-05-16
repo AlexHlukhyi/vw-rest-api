@@ -53,4 +53,40 @@ class DB {
 			return false;
 		}
 	}
+	function runSP($name, $params = []) {
+		try {
+			if ($this->connection || $this->connect()) {
+				$result = [];
+				$str = str_repeat("?, ", count($params));
+				if (strlen($str) > 0) {
+					$str = substr($str, 0, strlen($str) - 2);
+				}
+				$sql = 'exec ' . $name . ' ' . $str;
+				foreach ($params as $key => $param) {
+					if (isset($param[1]) && $param[1] == 'out') {
+						$params[$key][1] = SQLSRV_PARAM_OUT;
+					} else {
+						$params[$key][1] = SQLSRV_PARAM_IN;
+					}
+				}
+				$statement = sqlsrv_prepare($this->connection, $sql, $params);
+				sqlsrv_execute($statement);
+				while ($row = sqlsrv_fetch_array($statement, SQLSRV_FETCH_ASSOC)) {
+					$oneResult[] = $row;
+				}
+				$result[] = $oneResult;
+				while (sqlsrv_next_result($statement)) {
+					$oneResult = [];
+					while ($row = sqlsrv_fetch_array($statement, SQLSRV_FETCH_ASSOC)) {
+						$oneResult[] = $row;
+					}
+					$result[] = $oneResult;
+				}
+				return $result;
+			}
+		} catch (Exception $ex) {
+			$this->errorText = 'Unexpected Exception!';
+			return false;
+		}
+	}
 }

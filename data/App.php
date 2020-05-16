@@ -51,68 +51,60 @@ class App {
 		}
 	}
 	public function getComplectations() {
-		$result = [];
-		$sql = 'select m.id model_id, m.name model_name, 
-       				e.id engine_id, e.name engine_name, 
-					g.id gearbox_id, g.name gearbox_name, g.type gearbox_type, 
-       				c.id complectation_id, c.name complectation_name
-				from complectations c
-					inner join models m on m.id = c.model_id
-					inner join engines e on e.id = c.engine_id
-					inner join gearboxes g on g.id = gearbox_id';
-		if ($complectations = $this->db->makeQuery($sql)) {
-			foreach ($complectations as $complectation) {
-				$result[] = new Complectation(
-					$complectation['complectation_id'], $complectation['complectation_name'],
-					new Model($complectation['model_id'], $complectation['model_name']),
-					new Engine($complectation['engine_id'], $complectation['engine_name']),
-					new Gearbox($complectation['gearbox_id'], $complectation['gearbox_name'], $complectation['gearbox_type'])
-				);
-			}
+		$result = $this->db->runSP('getComplectations');
+		if (!$result) {
 			return $result;
-		} else {
+		}
+		$quantity = $result[0];
+		if (!$quantity || !$quantity[0]) {
 			return false;
 		}
+		$rows = $result[1];
+		$complectations = [];
+		foreach ($rows as $row) {
+			$complectations[] = new Complectation(
+				$row['complectation_id'], $row['complectation_name'],
+				new Model($row['model_id'], $row['model_name']),
+				new Engine($row['engine_id'], $row['engine_name']),
+				new Gearbox($row['gearbox_id'], $row['gearbox_name'], $row['gearbox_type'])
+			);
+		}
+		return [$quantity, $complectations];
 	}
 	public function getComplectation($complectationId) {
-		$sql = 'select m.id model_id, m.name model_name, 
-       				e.id engine_id, e.name engine_name, 
-					g.id gearbox_id, g.name gearbox_name, g.type gearbox_type, 
-       				c.id complectation_id, c.name complectation_name
-				from complectations c
-					inner join models m on m.id = c.model_id
-					inner join engines e on e.id = c.engine_id
-					inner join gearboxes g on g.id = gearbox_id
-				where c.id = ' . $complectationId;
-		$complectation = $this->db->makeQuery($sql);
-		if (!$complectation || !$complectation[0]) {
+		$result = $this->db->runSP('getComplectation', [
+			[$complectationId, 'in']
+		]);
+		if (!$result || !$result[0]) {
 			return false;
 		} else {
-			$result = new Complectation(
-				$complectation[0]['complectation_id'], $complectation[0]['complectation_name'],
-				new Model($complectation[0]['model_id'], $complectation[0]['model_name']),
-				new Engine($complectation[0]['engine_id'], $complectation[0]['engine_name']),
-				new Gearbox($complectation[0]['gearbox_id'], $complectation[0]['gearbox_name'], $complectation[0]['gearbox_type'])
+			$complectation = new Complectation(
+				$result[0][0]['complectation_id'],
+				$result[0][0]['complectation_name']
 			);
-			return $result;
+			return $complectation;
 		}
 	}
 	public function deleteComplectation($complectationId) {
-		$sql = 'delete from complectations where id = ' . $complectationId;
-		return $this->db->makeQuery($sql);
+		return $this->db->runSP('deleteComplectation', [
+			[$complectationId, 'in']
+		]);
 	}
 	public function updateComplectation(Complectation $complectation) {
-		$sql = 'update complectations set  name = \''
-					. $complectation->getName()
-				. '\' where id = ' . $complectation->getId();
-		return $this->db->makeQuery($sql);
+		$status = 0;
+		$this->db->runSP('editComplectation', [
+			[$complectation->getId(), 'in'],
+			[$complectation->getName(), 'in'],
+			[&$status, 'out']
+		]);
+		return (bool)$status;
 	}
 	public function insertComplectation(Complectation $complectation) {
-		$sql = 'insert into complectations(name, model_id, engine_id, gearbox_id) values(\''
-					. $complectation->getName() . '\','
-					. $complectation->getModel()->getId() . ','
-					. $complectation->getEngine()->getId() . ','
-					. $complectation->getGearbox()->getId() . ')';
-		return $this->db->makeQuery($sql);
+		return $this->db->runSP('insertComplectation', [
+			[$complectation->getName(), 'in'],
+			[$complectation->getModel()->getId(), 'in'],
+			[$complectation->getEngine()->getId(), 'in'],
+			[$complectation->getGearbox()->getId(), 'in'],
+		]);
 	}
 }
